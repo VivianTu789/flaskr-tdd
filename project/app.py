@@ -1,8 +1,7 @@
-import sqlite3, os
+import os
 from pathlib import Path
 from functools import wraps
-from flask import Flask, g, render_template, request, session, \
-                  flash, redirect, url_for, abort, jsonify
+from flask import Flask, g, render_template, request, session, flash, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -30,6 +29,9 @@ app.config.from_object(__name__)
 db = SQLAlchemy(app)
 
 from project import models
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/')

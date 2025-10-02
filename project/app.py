@@ -1,4 +1,4 @@
-import sqlite3
+import sqlite3, os
 from pathlib import Path
 from functools import wraps
 from flask import Flask, g, render_template, request, session, \
@@ -13,8 +13,13 @@ DATABASE = "flaskr.db"
 USERNAME = "admin"
 PASSWORD = "admin"
 SECRET_KEY = "change_me"
-SQLALCHEMY_DATABASE_URI = f'sqlite:///{Path(basedir).joinpath(DATABASE)}'
+url = os.getenv('DATABASE_URL', f'sqlite:///{Path(basedir).joinpath(DATABASE)}')
+
+if url.startswith("postgres://"):
+    url = url.replace("postgres://", "postgresql://", 1)
+SQLALCHEMY_DATABASE_URI = url
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+#env:DATABASE_URL="postgresql://ece444_deploy_dbtest_sa19_user:V7n8SFOxerfhjEzP8RY05KCEuX7jYlQ2@dpg-d3dje4r7mgec73cttgtg-a.oregon-postgres.render.com/ece444_deploy_dbtest_sa19"
 
 
 # create and initialize a new Flask app
